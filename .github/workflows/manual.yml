@@ -20,11 +20,30 @@ on:
 jobs:
   # This workflow contains a single job called "greet"
   greet:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+  meet:
+    needs: greet
+    runs-on: ubuntu-latest
+    steps:
+    - name: Diskutieren
+      run: echo "Diskutieren"
+    
+    - name: Checkout
+      uses: actions/checkout@v2.5.0
+      
+  bye:
+    needs: meet
+    runs-on: ubuntu-latest
+    steps: 
+        - name: Say bye
+          run: echo "Tschüss"
